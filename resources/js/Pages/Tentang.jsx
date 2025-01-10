@@ -9,13 +9,13 @@ const About = () => {
   return (
     <>
       <Navbar/>
-      <HeroCustom name="Tentang Desa Sindang Anom"/>
+      <HeroCustom name="Informasi Tentang Desa Sindang Anom"/>
       <Layout>
       <div className="bg-white flex justify-center">
         <div className="container px-5 md:px-[150px]">
           {/* Title Section */}
           <div className="text-justify mb-8 mt-[150px]">
-            <h1 className="text-xl md:text-4xl font-bold text-green">
+            <h1 className="text-2xl md:text-4xl font-bold text-green">
               Tentang Desa Sindang Anom
             </h1>
           </div>

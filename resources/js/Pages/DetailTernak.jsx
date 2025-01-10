@@ -118,11 +118,19 @@ const DetailTernak = ( ) => {
   return (
     <Layout>
       <div className="bg-gray-100 min-h-screen p-6 md:p-12 mt-20">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto reverse">
           {/* Farm Information */}
           <div className="bg-white rounded-lg mb-8">
             <div className="p-6">
-              <div className="flex flex-col md:flex-row gap-8">
+              <div className="flex flex-col-reverse md:flex-row gap-8">
+                {/* Gambar dipindahkan ke atas pada mobile */}
+                <div className="md:w-1/2 order-1 md:order-none">
+                  <img
+                    src={farm.image || "https://placehold.co/600x400"}
+                    alt="farm"
+                    className="rounded-lg w-full h-full object-cover shadow-lg"
+                  />
+                </div>
                 <div className="md:w-1/2 space-y-6">
                   <h1 className="text-3xl font-bold text-gray-800">{farm.name}</h1>
                   <div>
@@ -146,13 +154,6 @@ const DetailTernak = ( ) => {
                     </button>
                   </Link>
                 </div>
-                <div className="md:w-1/2">
-                  <img
-                    src={farm.image || "https://placehold.co/600x400"}
-                    alt="farm"
-                    className="rounded-lg w-full h-full object-cover shadow-lg"
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -170,37 +171,37 @@ const DetailTernak = ( ) => {
 
           {/* Date Filters */}
           <div className="rounded-lg shadow-lg p-6 mb-8">
-        <h2 className="text-xl font-bold text-green mb-4 flex items-center">
-          <CalendarIcon className="mr-2 h-6 w-6 text-green" />
-          Filter Data
-        </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-green font-semibold mb-2">Tanggal Mulai</label>
-              <div className="relative">
-                <input
-                  type="date"
-                  className="w-full border-green rounded-lg shadow-sm focus:border-green focus:ring focus:ring-green focus:ring-opacity-50 pl-10 pr-4 py-2 text-green"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                />
-                <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green" />
+            <h2 className="text-xl font-bold text-green mb-4 flex items-center">
+              <CalendarIcon className="mr-2 h-6 w-6 text-green" />
+              Filter Data
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-green font-semibold mb-2">Tanggal Mulai</label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    className="w-full border-green rounded-lg shadow-sm focus:border-green focus:ring focus:ring-green focus:ring-opacity-50 pl-10 pr-4 py-2 text-green"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                  <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green" />
+                </div>
               </div>
-            </div>
-            <div>
-              <label className="block text-green font-semibold mb-2">Tanggal Akhir</label>
-              <div className="relative">
-                <input
-                  type="date"
-                  className="w-full border-green rounded-lg shadow-sm focus:border-green focus:ring focus:ring-green focus:ring-opacity-50 pl-10 pr-4 py-2 text-green"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
-                <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green" />
+              <div>
+                <label className="block text-green font-semibold mb-2">Tanggal Akhir</label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    className="w-full border-green rounded-lg shadow-sm focus:border-green focus:ring focus:ring-green focus:ring-opacity-50 pl-10 pr-4 py-2 text-green"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                  <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
           {/* Sensor Charts */}
           <div className="bg-white rounded-lg shadow-md p-6">
