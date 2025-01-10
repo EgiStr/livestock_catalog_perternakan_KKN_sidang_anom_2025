@@ -29,29 +29,34 @@ class IotSensorsResource extends Resource
                             ->relationship('farm', 'name')
                             ->required()
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->label('Peternakan'),
 
                         Forms\Components\Grid::make()
                             ->schema([
                                 Forms\Components\TextInput::make('temperature')
                                     ->required()
                                     ->numeric()
-                                    ->suffix('°C'),
+                                    ->suffix('°C')
+                                    ->label('Suhu'),
 
                                 Forms\Components\TextInput::make('humidity')
                                     ->required()
                                     ->numeric()
-                                    ->suffix('%'),
+                                    ->suffix('%')
+                                    ->label('Kelembaban'),
 
                                 Forms\Components\TextInput::make('ammonia')
                                     ->required()
                                     ->numeric()
-                                    ->suffix('ppm'),
+                                    ->suffix('ppm')
+                                    ->label('Amonia'),
 
                                 Forms\Components\TextInput::make('light_intensity')
                                     ->required()
                                     ->numeric()
-                                    ->suffix('lux'),
+                                    ->suffix('lux')
+                                    ->label('Intensitas Cahaya'),
                             ])
                             ->columns(2),
                     ])
@@ -64,36 +69,44 @@ class IotSensorsResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('farm.name')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Nama Peternakan'),
                 Tables\Columns\TextColumn::make('temperature')
                     ->sortable()
                     ->numeric(2)
-                    ->suffix('°C'),
+                    ->suffix('°C')
+                    ->label('Suhu'),
                 Tables\Columns\TextColumn::make('humidity')
                     ->sortable()
                     ->numeric(2)
-                    ->suffix('%'),
+                    ->suffix('%')
+                    ->label('Kelembaban'),
                 Tables\Columns\TextColumn::make('ammonia')
                     ->sortable()
                     ->numeric(2)
-                    ->suffix('ppm'),
+                    ->suffix('ppm')
+                    ->label('Amonia'),
                 Tables\Columns\TextColumn::make('light_intensity')
                     ->sortable()
                     ->numeric(2)
-                    ->suffix('lux'),
+                    ->suffix('lux')
+                    ->label('Intensitas Cahaya'),
                 Tables\Columns\TextColumn::make('createdAt')
-                    ->label('Recorded At')
+                    ->label('Dicatat Pada')
                     ->dateTime()
                     ->sortable(),
             ])
             ->defaultSort('createdAt', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('farm')
-                    ->relationship('farm', 'name'),
+                    ->relationship('farm', 'name')
+                    ->label('Peternakan'),
                 Tables\Filters\Filter::make('createdAt')
                     ->form([
-                        Forms\Components\DatePicker::make('created_from'),
-                        Forms\Components\DatePicker::make('created_until'),
+                        Forms\Components\DatePicker::make('created_from')
+                            ->label('Dari Tanggal'),
+                        Forms\Components\DatePicker::make('created_until')
+                            ->label('Sampai Tanggal'),
                     ])
                     ->query(function ($query, array $data) {
                         return $query
@@ -106,18 +119,19 @@ class IotSensorsResource extends Resource
                                 fn($query) => $query->whereDate('createdAt', '<=', $data['created_until']),
                             );
                     })
+                    ->label('Tanggal Pencatatan')
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->label('Edit'),
+                Tables\Actions\DeleteAction::make()->label('Hapus'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()->label('Hapus Terpilih'),
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()->label('Buat Baru'),
             ]);
     }
 
@@ -151,19 +165,16 @@ class IotSensorsResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Farm' => $record->farm->name,
-            'Temperature' => $record->temperature . '°C',
-            'Humidity' => $record->humidity . '%',
+            'Peternakan' => $record->farm->name,
+            'Suhu' => $record->temperature . '°C',
+            'Kelembaban' => $record->humidity . '%',
+            'Amonia' => $record->ammonia . 'ppm',
+            'Intensitas Cahaya' => $record->light_intensity . 'lux',
         ];
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Farm Management';
-    }
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
+        return 'Manajemen Peternakan';
     }
 }

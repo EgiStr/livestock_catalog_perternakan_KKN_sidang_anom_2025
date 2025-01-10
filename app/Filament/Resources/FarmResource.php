@@ -30,13 +30,15 @@ class FarmResource extends Resource
                         Forms\Components\FileUpload::make('image_url')
                             ->image()
                             ->directory('farms')
+                            ->label('Gambar')
                             ->columnSpanFull(),
 
                         Forms\Components\Section::make()
                             ->schema([
                                 Forms\Components\TextInput::make('name')
                                     ->required()
-                                    ->maxLength(255),
+                                    ->maxLength(255)
+                                    ->label('Nama'),
 
                                 Forms\Components\Hidden::make('user_id')
                                     ->default(fn() => auth()->id())
@@ -45,20 +47,24 @@ class FarmResource extends Resource
                                 Forms\Components\TextInput::make('capacity')
                                     ->required()
                                     ->numeric()
-                                    ->minValue(0),
+                                    ->minValue(0)
+                                    ->label('Kapasitas'),
 
                                 Forms\Components\Toggle::make('is_active')
                                     ->required()
-                                    ->default(true),
+                                    ->default(true)
+                                    ->label('Aktif'),
 
                                 Forms\Components\Textarea::make('description')
                                     ->required()
                                     ->maxLength(65535)
-                                    ->columnSpanFull(),
+                                    ->columnSpanFull()
+                                    ->label('Deskripsi'),
 
                                 Forms\Components\Textarea::make('location')
                                     ->required()
-                                    ->columnSpanFull(),
+                                    ->columnSpanFull()
+                                    ->label('Lokasi'),
                                 Grid::make()
                                     ->schema([
                                         TextInput::make('latitude')
@@ -68,7 +74,8 @@ class FarmResource extends Resource
                                             ->default(-5.2962)
                                             ->minValue(-90)
                                             ->maxValue(90)
-                                            ->step('0.00000001'), // 8 decimal places
+                                            ->step('0.00000001') // 8 decimal places
+                                            ->label('Latitude'),
 
                                         TextInput::make('longitude')
                                             ->numeric()
@@ -77,14 +84,15 @@ class FarmResource extends Resource
                                             ->default(105.4478)
                                             ->minValue(-180)
                                             ->maxValue(180)
-                                            ->step('0.00000001'), // 8 decimal places
+                                            ->step('0.00000001') // 8 decimal places
+                                            ->label('Longitude'),
                                     ])
                                     ->columns(2),
 
                                 Map::make('coordinates')
-                                    ->label('Location')
+                                    ->label('Peta Lokasi')
                                     ->liveLocation(true)
-                                    ->afterStateUpdated(    function (Set $set, ?array $state): void {
+                                    ->afterStateUpdated(function (Set $set, ?array $state): void {
                                         $set('latitude',  $state['lat']);
                                         $set('longitude', $state['lng']);
                                     })
@@ -109,6 +117,7 @@ class FarmResource extends Resource
                                     ->required()
                                     ->minValue(0)
                                     ->suffix('m')
+                                    ->label('Lebar Kandang')
                                     ->columnSpan(2),
 
                                 Forms\Components\TextInput::make('pan_height')
@@ -116,6 +125,7 @@ class FarmResource extends Resource
                                     ->required()
                                     ->minValue(0)
                                     ->suffix('m')
+                                    ->label('Tinggi Kandang')
                                     ->columnSpan(2),
 
                                 Forms\Components\TextInput::make('pan_length')
@@ -123,6 +133,7 @@ class FarmResource extends Resource
                                     ->required()
                                     ->minValue(0)
                                     ->suffix('m')
+                                    ->label('Panjang Kandang')
                                     ->columnSpan(2),
                             ])
                     ])
@@ -137,40 +148,45 @@ class FarmResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('image_url')
                     ->square()
-                    ->label('Image'),
+                    ->label('Gambar'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Nama'),
                 Tables\Columns\TextColumn::make('user.fullname')
                     ->searchable()
                     ->sortable()
-                    ->label('Owner'),
+                    ->label('Pemilik'),
                 Tables\Columns\TextColumn::make('location')
                     ->searchable()
-                    ->wrap(),
+                    ->wrap()
+                    ->label('Lokasi'),
                 Tables\Columns\TextColumn::make('capacity')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Kapasitas'),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Aktif'),
                 Tables\Columns\TextColumn::make('createdAt')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->label('Dibuat Pada'),
             ])
             ->defaultSort('createdAt', 'desc')
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active')
-                    ->label('Active Status'),
+                    ->label('Status Aktif'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->label('Edit'),
+                Tables\Actions\DeleteAction::make()->label('Hapus'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()->label('Hapus Massal'),
                 ]),
             ]);
     }
@@ -204,19 +220,15 @@ class FarmResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Owner' => $record->user->fullname,
-            'Location' => $record->location,
-            'Capacity' => $record->capacity,
+            'Pemilik' => $record->user->fullname,
+            'Lokasi' => $record->location,
+            'Kapasitas' => $record->capacity,
         ];
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Farm Management';
+        return 'Manajemen Peternakan';
     }
 
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
 }

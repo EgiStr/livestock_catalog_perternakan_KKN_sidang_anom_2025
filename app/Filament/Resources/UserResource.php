@@ -46,17 +46,6 @@ class UserResource extends Resource
                             ->collection('avatars')
                             ->alignCenter()
                             ->columnSpanFull(),
-
-                        Forms\Components\Actions::make([
-                            Action::make('resend_verification')
-                                ->label(__('resource.user.actions.resend_verification'))
-                                ->color('info')
-                                ->action(fn(MailSettings $settings, Model $record) => static::doResendEmailVerification($settings, $record)),
-                        ])
-                            // ->hidden(fn (User $user) => $user->email_verified_at != null)
-                            ->hiddenOn('create')
-                            ->fullWidth(),
-
                         Forms\Components\Section::make()
                             ->schema([
                                 Forms\Components\TextInput::make('password')
@@ -64,14 +53,16 @@ class UserResource extends Resource
                                     ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
                                     ->dehydrated(fn(?string $state): bool => filled($state))
                                     ->revealable()
-                                    ->required(),
+                                    ->required()
+                                    ->label('Kata Sandi'),
                                 Forms\Components\TextInput::make('passwordConfirmation')
                                     ->password()
                                     ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
                                     ->dehydrated(fn(?string $state): bool => filled($state))
                                     ->revealable()
                                     ->same('password')
-                                    ->required(),
+                                    ->required()
+                                    ->label('Konfirmasi Kata Sandi'),
                             ])
                             ->compact()
                             ->hidden(fn(string $operation): bool => $operation === 'edit'),
@@ -79,13 +70,13 @@ class UserResource extends Resource
                         Forms\Components\Section::make()
                             ->schema([
                                 Forms\Components\Placeholder::make('email_verified_at')
-                                    ->label(__('resource.general.email_verified_at'))
+                                    ->label('Email Terverifikasi Pada')
                                     ->content(fn(User $record): ?string => new HtmlString("$record->email_verified_at")),
                                 Forms\Components\Placeholder::make('created_at')
-                                    ->label(__('resource.general.created_at'))
+                                    ->label('Dibuat Pada')
                                     ->content(fn(User $record): ?string => $record->created_at?->diffForHumans()),
                                 Forms\Components\Placeholder::make('updated_at')
-                                    ->label(__('resource.general.updated_at'))
+                                    ->label('Diperbarui Pada')
                                     ->content(fn(User $record): ?string => $record->updated_at?->diffForHumans()),
                             ])
                             ->compact()
@@ -95,13 +86,14 @@ class UserResource extends Resource
 
                 Forms\Components\Tabs::make()
                     ->schema([
-                        Forms\Components\Tabs\Tab::make('Details')
+                        Forms\Components\Tabs\Tab::make('Detail')
                             ->icon('heroicon-o-information-circle')
                             ->schema([
                                 Forms\Components\TextInput::make('fullname')
                                     ->required()
                                     ->maxLength(255)
                                     ->live()
+                                    ->label('Nama Lengkap')
                                     ->rules(function ($record) {
                                         $userId = $record?->id;
                                         return $userId
@@ -113,6 +105,7 @@ class UserResource extends Resource
                                     ->email()
                                     ->required()
                                     ->maxLength(255)
+                                    ->label('Email')
                                     ->rules(function ($record) {
                                         $userId = $record?->id;
                                         return $userId
@@ -122,13 +115,15 @@ class UserResource extends Resource
 
                                 Forms\Components\TextInput::make('phone_number')
                                     ->required()
-                                    ->maxLength(255),
+                                    ->maxLength(255)
+                                    ->label('Nomor Telepon'),
 
                                 Forms\Components\TextInput::make('bio')
+                                    ->label('Biografi'),
                             ])
                             ->columns(2),
 
-                        Forms\Components\Tabs\Tab::make('Roles')
+                        Forms\Components\Tabs\Tab::make('Peran')
                             ->icon('fluentui-shield-task-48')
                             ->schema([
                                 Select::make('roles')
@@ -139,7 +134,8 @@ class UserResource extends Resource
                                     ->preload()
                                     ->searchable()
                                     ->optionsLimit(5)
-                                    ->columnSpanFull(),
+                                    ->columnSpanFull()
+                                    ->label('Peran'),
                             ])
                     ])
                     ->columnSpan([
@@ -154,29 +150,26 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('media')->label('profile')
+                SpatieMediaLibraryImageColumn::make('media')->label('Profil')
                     ->collection('avatars')
                     ->wrap(),
-                Tables\Columns\TextColumn::make('fullname')->label('Nama lengkap')
-                    ->description('The user\'s full name')
+                Tables\Columns\TextColumn::make('fullname')->label('Nama Lengkap')
+                    ->description('Nama lengkap pengguna')
                     ->searchable(),
-                    Tables\Columns\TextColumn::make('phone_number')->label('Nomor Telpone')
-                    ->description('The user\'s full name')
+                Tables\Columns\TextColumn::make('phone_number')->label('Nomor Telepon')
+                    ->description('Nomor telepon pengguna')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('roles.name')->label('Role')
+                Tables\Columns\TextColumn::make('roles.name')->label('Peran')
                     ->formatStateUsing(fn($state): string => Str::headline($state))
                     ->colors(['info'])
                     ->badge(),
-                Tables\Columns\TextColumn::make('email')
+                Tables\Columns\TextColumn::make('email')->label('Email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')->label('Verified at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                Tables\Columns\TextColumn::make('created_at')->label('Dibuat Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                Tables\Columns\TextColumn::make('updated_at')->label('Diperbarui Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -185,12 +178,12 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->label('Edit'),
+                Tables\Actions\DeleteAction::make()->label('Hapus'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()->label('Hapus Massal'),
                 ]),
             ]);
     }
@@ -218,19 +211,19 @@ class UserResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['email', 'fullname', 'phone_number','bio'];
+        return ['email', 'fullname', 'phone_number', 'bio'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'name' => $record->fullname ,
+            'name' => $record->fullname,
         ];
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return __("menu.nav_group.access");
+        return 'Akses';
     }
 
     public static function doResendEmailVerification($settings = null, $user): void
@@ -238,7 +231,7 @@ class UserResource extends Resource
         if (!method_exists($user, 'notify')) {
             $userClass = $user::class;
 
-            throw new Exception("Model [{$userClass}] does not have a [notify()] method.");
+            throw new Exception("Model [{$userClass}] tidak memiliki metode [notify()].");
         }
 
         if ($settings->isMailSettingsConfigured()) {
@@ -249,15 +242,14 @@ class UserResource extends Resource
 
             $user->notify($notification);
 
-
             Notification::make()
-                ->title(__('resource.user.notifications.verify_sent.title'))
+                ->title('Verifikasi Email Terkirim')
                 ->success()
                 ->send();
         } else {
             Notification::make()
-                ->title(__('resource.user.notifications.verify_warning.title'))
-                ->body(__('resource.user.notifications.verify_warning.description'))
+                ->title('Pengaturan Email Tidak Dikonfigurasi')
+                ->body('Silakan konfigurasikan pengaturan email terlebih dahulu.')
                 ->warning()
                 ->send();
         }

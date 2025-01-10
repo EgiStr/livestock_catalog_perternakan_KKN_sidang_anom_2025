@@ -38,8 +38,4 @@ class Farm extends Model
         return $this->hasMany(IotSensors::class);
     }
 
-    public function manual_sensors()
-    {
-        return $this->hasMany(ManualConditions::class);
-    }
 }
