@@ -16,8 +16,8 @@ const Profil = ({ users }) => {
       <div className="bg-white flex justify-center mb-20">
         <div className="container px-5 md:px-[50px]">
           {/* Title Section */}
-          <div className="text-justify mb-[100px] mt-[100px]">
-            <h1 className="text-xl md:text-3xl font-bold text-green text-center">
+          <div className="text-justify mb-[100px] mt-[120px]">
+            <h1 className="text-3xl md:text-3xl font-bold text-green text-center">
               Daftar Pemilik Ternak 
             </h1>
           </div>
