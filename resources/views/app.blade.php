@@ -19,7 +19,7 @@
         <meta property="og:url" content="" />
         <meta property="og:title" content="desa sindang anom" />
         <meta property="og:description" content="desa sindang anom menyediakan katalog peternakan yang sangat lengkap serta menyediakan informasi terkait kesehatan kandang serta terintegrasi dengan Iot" />
-        <meta property="og:image" content="https://github.com/user-attachments/assets/a0a4dbb3-0803-46a3-814c-6ae94810d9a9" />
+        <meta property="og:image" content="https://github.com/user-attachments/assets/deff3df0-9da5-4894-a61a-9a6c133a0e08" />
         <meta property="og:image:width" content="300">
         <meta property="og:image:height" content="300">
         
@@ -28,7 +28,7 @@
         <meta property="twitter:url" content="" />
         <meta property="twitter:title" content="desa sindan anom" />
         <meta property="twitter:description" content="desa sindang anom menyediakan katalog peternakan yang sangat lengkap serta menyediakan informasi terkait kesehatan kandang serta terintegrasi Iot" />
-        <meta property="twitter:image" content="https://github.com/user-attachments/assets/a0a4dbb3-0803-46a3-814c-6ae94810d9a9" />
+        <meta property="twitter:image" content="https://github.com/user-attachments/assets/deff3df0-9da5-4894-a61a-9a6c133a0e08" />
         <!-- Meta Tags Generated with https://metatags.io -->
 
         <title>Desa Sindang Anom</title>
