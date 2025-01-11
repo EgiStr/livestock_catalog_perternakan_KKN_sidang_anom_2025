@@ -29,11 +29,11 @@ const Profil = ({ users }) => {
                 className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
               >
                 {/* Image Placeholder */}
-                <div className="bg-gray-200">
+                <div className="flex items-center justify-center bg-gray-200">
                   <img
-                    src="https://placehold.co/600x400"
+                    src="https://github.com/user-attachments/assets/455f157d-e609-4b0e-9e11-d7ee36e8089d"
                     alt="User"
-                    className="w-full h-[200px] object-cover"
+                    className="w-[50%] object-cover"
                   />
                 </div>
 

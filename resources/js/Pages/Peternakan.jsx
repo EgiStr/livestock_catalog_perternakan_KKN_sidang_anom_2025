@@ -32,7 +32,7 @@ const Ternak = ({ farms }) => {
                   <div className="bg-gray-200">
                     <img
                       // src={farm.image_url}
-                      src="https://placehold.co/600x400"
+                      src="https://github.com/user-attachments/assets/24fb7c2d-fad0-42a2-b588-09f90ad43b7e"
                       className="w-full h-[200px] object-cover"
                       alt="Farm"
                     />

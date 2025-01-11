@@ -25,58 +25,58 @@ ChartJS.register(
   Legend
 );
 
-const DetailTernak = ( ) => {
+const DetailTernak = ( {farm} ) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const farm = {
-    name: "Kandang Ternak Sejahtera",
-    description: "Kandang modern untuk peternakan unggas.",
-    pan_length: 10,
-    pan_width: 5,
-    pan_height: 3,
-    capacity: 200,
-    location: "Desa Maju, Kecamatan Harmoni",
-    user: {
-      fullname: "Pak Tani",
-      phone_number: "081234567890",
-    },
-    image: "https://placehold.co/600x400",
-    iot_sensors: {
-      temperature: "30°C",
-      humidity: "70%",
-      ammonia: "5 ppm",
-      light_intensity: "1000 lux",
-      temperature_data: Array.from({ length: 60 }, (_, i) => {
-        const date = new Date(2025, 0, 1 + i); // Mulai dari 1 Januari 2025
-        return {
-          datetime: date.toISOString().split("T")[0], // Format tanggal: YYYY-MM-DD
-          value: Math.random() * 5 + 28, // Suhu antara 28°C - 33°C
-        };
-      }),
-      humidity_data: Array.from({ length: 60 }, (_, i) => {
-        const date = new Date(2025, 0, 1 + i);
-        return {
-          datetime: date.toISOString().split("T")[0],
-          value: Math.random() * 10 + 65, // Kelembapan antara 65% - 75%
-        };
-      }),
-      ammonia_data: Array.from({ length: 60 }, (_, i) => {
-        const date = new Date(2025, 0, 1 + i);
-        return {
-          datetime: date.toISOString().split("T")[0],
-          value: Math.random() * 2 + 4, // Amonia antara 4 ppm - 6 ppm
-        };
-      }),
-      light_intensity_data: Array.from({ length: 60 }, (_, i) => {
-        const date = new Date(2025, 0, 1 + i);
-        return {
-          datetime: date.toISOString().split("T")[0],
-          value: Math.random() * 300 + 900, // Intensitas cahaya antara 900 lux - 1200 lux
-        };
-      }),
-    },
-  };
+  // const farm = {
+  //   name: "Kandang Ternak Sejahtera",
+  //   description: "Kandang modern untuk peternakan unggas.",
+  //   pan_length: 10,
+  //   pan_width: 5,
+  //   pan_height: 3,
+  //   capacity: 200,
+  //   location: "Desa Maju, Kecamatan Harmoni",
+  //   user: {
+  //     fullname: "Pak Tani",
+  //     phone_number: "081234567890",
+  //   },
+  //   image: "https://placehold.co/600x400",
+  //   iot_sensors: {
+  //     temperature: "30°C",
+  //     humidity: "70%",
+  //     ammonia: "5 ppm",
+  //     light_intensity: "1000 lux",
+  //     temperature_data: Array.from({ length: 60 }, (_, i) => {
+  //       const date = new Date(2025, 0, 1 + i); // Mulai dari 1 Januari 2025
+  //       return {
+  //         datetime: date.toISOString().split("T")[0], // Format tanggal: YYYY-MM-DD
+  //         value: Math.random() * 5 + 28, // Suhu antara 28°C - 33°C
+  //       };
+  //     }),
+  //     humidity_data: Array.from({ length: 60 }, (_, i) => {
+  //       const date = new Date(2025, 0, 1 + i);
+  //       return {
+  //         datetime: date.toISOString().split("T")[0],
+  //         value: Math.random() * 10 + 65, // Kelembapan antara 65% - 75%
+  //       };
+  //     }),
+  //     ammonia_data: Array.from({ length: 60 }, (_, i) => {
+  //       const date = new Date(2025, 0, 1 + i);
+  //       return {
+  //         datetime: date.toISOString().split("T")[0],
+  //         value: Math.random() * 2 + 4, // Amonia antara 4 ppm - 6 ppm
+  //       };
+  //     }),
+  //     light_intensity_data: Array.from({ length: 60 }, (_, i) => {
+  //       const date = new Date(2025, 0, 1 + i);
+  //       return {
+  //         datetime: date.toISOString().split("T")[0],
+  //         value: Math.random() * 300 + 900, // Intensitas cahaya antara 900 lux - 1200 lux
+  //       };
+  //     }),
+  //   },
+  // };
 
   const filterDataByDate = (data) => {
     if (!startDate || !endDate) return data;
@@ -126,7 +126,8 @@ const DetailTernak = ( ) => {
                 {/* Gambar dipindahkan ke atas pada mobile */}
                 <div className="md:w-1/2 order-1 md:order-none">
                   <img
-                    src={farm.image || "https://placehold.co/600x400"}
+                    src="https://github.com/user-attachments/assets/24fb7c2d-fad0-42a2-b588-09f90ad43b7e"
+                    // src={farm.image_url || "https://github.com/user-attachments/assets/24fb7c2d-fad0-42a2-b588-09f90ad43b7e"}
                     alt="farm"
                     className="rounded-lg w-full h-full object-cover shadow-lg"
                   />

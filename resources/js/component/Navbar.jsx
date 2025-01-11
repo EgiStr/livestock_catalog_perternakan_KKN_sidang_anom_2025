@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import { Menu, X } from "react-feather";
 import Logo from '../../../public/images/Logo.png'
 
+  const handleClick = () => {
+    history.push('/admin');
+  };
+
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -77,11 +81,9 @@ const Navbar = () => {
           <Link href={"/profil"} className="text-black hover:text-gray-600 transition duration-200">
             Profil Pemilik Ternak
           </Link>
-          <Link href={"/admin"}>
-            <button className="bg-green hover:bg-HoverGreen text-white px-4 py-2 rounded-full transition duration-200">
+          <button onClick={handleClick} className="bg-green hover:bg-HoverGreen text-white px-4 py-2 rounded-full transition duration-200">
               Masuk
-            </button>
-          </Link>
+          </button>
         </div>
       </div>
     </nav>

@@ -9,7 +9,7 @@ const About = () => {
   return (
     <>
       <Navbar/>
-      <HeroCustom name="Informasi Tentang Desa Sindang Anom"/>
+        <HeroCustom name="Informasi Tentang Desa Sindang Anom"/>
       <Layout>
       <div className="bg-white flex justify-center">
         <div className="container px-5 md:px-[150px]">

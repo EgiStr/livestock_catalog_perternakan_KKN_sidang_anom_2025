@@ -25,7 +25,7 @@ const TernakHome = ({farms}) => {
           >
             {/* Image Placeholder */}
             <div className="bg-gray-200">
-                <img src="https://placehold.co/400x300" alt="" />
+                <img src="https://github.com/user-attachments/assets/24fb7c2d-fad0-42a2-b588-09f90ad43b7e" alt="" />
             </div>
 
             {/* Card Content */}
