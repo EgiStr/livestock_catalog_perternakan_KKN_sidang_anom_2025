@@ -14,28 +14,33 @@ const DetailProfil = ({ user }) => {
           <div className="flex flex-col md:flex-row md:gap-12 bg-white rounded-lg p-6">
             {/* Profile Image */}
             <img
-            // src={user.kandangImage}
-            src="https://placehold.co/300x200"
-            alt="Kandang"
-            className="rounded-lg w-full"
-          />
-            
+              // src={user.kandangImage}
+              src="https://github.com/user-attachments/assets/455f157d-e609-4b0e-9e11-d7ee36e8089d"
+              alt="Kandang"
+              className="rounded-lg w-full md:w-1/2 md:h-auto object-cover"
+            />
+
             {/* Profile Information */}
-            <div className="space-y-4 mt-6 md:mt-0">
+            <div className="space-y-6 mt-6 md:mt-0 md:w-1/2">
               <h2 className="text-2xl font-bold text-green">{user.fullname}</h2>
-              <div className="space-y-2 w-[200px]">
+              
+              <div className="space-y-4">
+                {/* Bio Section */}
                 <div>
-                  <span className="text-green font-semibold">Bio</span>
-                  <p className="">
-                    {user.bio}
+                  <span className="text-green font-semibold text-lg">Bio</span>
+                  <p className="mt-2 text-gray-700">{user.bio}</p>
+                </div>
+
+                {/* Jumlah Kandang Section */}
+                <div>
+                  <p className="text-green font-bold text-md">
+                    Jumlah Kandang: <span className="text-black">{user.farms.length}</span>
                   </p>
                 </div>
-                
-                <div>
-                  <p className="text-green font-bold">Jumlah Kandang : <span className="text-black">{user.farms.length}</span></p>
-                </div>
+
+                {/* Hubungi Button Section */}
                 <Link href="/wa">
-                  <button className="flex justify-end text-sm text-white bg-green px-4 py-2 mt-20 rounded-md font-semibold">
+                  <button className="flex justify-center text-sm text-white bg-green px-6 py-3 mt-6 rounded-md font-semibold w-full md:w-auto">
                     Hubungi : {user.phone_number}
                   </button>
                 </Link>
@@ -43,6 +48,7 @@ const DetailProfil = ({ user }) => {
             </div>
           </div>
         </div>
+
 
 
 

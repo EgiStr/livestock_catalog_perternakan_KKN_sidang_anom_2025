@@ -40,7 +40,7 @@ const Home = ({ farms }) => {
       <Layout>
       <TentangHome />
         {/* <StokPage /> */}
-        <div className="min-h-screen bg-green flex flex-col items-center mt-[100px] p-[30px] pb-20">
+        <div className="min-h-screen overflow-x-hidden bg-green flex flex-col items-center mt-[100px] md:p-[30px] pb-20">
           <div className="text-center text-white mb-20">
             <h1 className="text-3xl font-bold mt-3">STOK</h1>
             <p className="text-lg font-semibold">
@@ -60,7 +60,7 @@ const Home = ({ farms }) => {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-6 items-center justify-center">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-2 items-center justify-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {staffMembers.map((staff, index) => (
               <div
                 key={index}
@@ -99,7 +99,8 @@ const Home = ({ farms }) => {
             >
               <div className="bg-gray-200">
                 <img
-                  src="https://placehold.co/400x300"
+                  // src="item.image_url"
+                  src="https://github.com/user-attachments/assets/24fb7c2d-fad0-42a2-b588-09f90ad43b7e"
                   alt="Peternakan"
                   className="w-full h-auto object-cover"
                 />

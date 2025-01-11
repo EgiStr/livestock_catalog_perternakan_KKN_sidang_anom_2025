@@ -30,6 +30,16 @@
         <meta property="twitter:description" content="desa sindang anom menyediakan katalog peternakan yang sangat lengkap serta menyediakan informasi terkait kesehatan kandang serta terintegrasi Iot" />
         <meta property="twitter:image" content="https://github.com/user-attachments/assets/deff3df0-9da5-4894-a61a-9a6c133a0e08" />
         <!-- Meta Tags Generated with https://metatags.io -->
+        <!-- Default Favicon -->
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+        <!-- Favicon untuk iOS -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/LOGO.png">
+
+        <!-- Favicon untuk Android -->
+        <link rel="icon" type="image/png" sizes="192x192" href="/LOGO.png">
+        <link rel="icon" type="image/png" sizes="512x512" href="/LOGO.png">
+
 
         <title>Desa Sindang Anom</title>
         <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
