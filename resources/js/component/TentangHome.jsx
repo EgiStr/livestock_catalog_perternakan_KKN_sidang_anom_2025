@@ -15,7 +15,7 @@ const TentangHome = () => {
             <h2 className="text-3xl text-HoverGreen md:text-4xl font-bold text-gray-800 mb-6 text-center md:text-left">
               Tentang Desa Sindang Anom
             </h2>
-            <p className="text-gray-600 text-left">
+            <p className="text-gray-600 text-justify">
             Desa Sindang Anom berkomitmen untuk menghadirkan berbagai program unggulan yang dirancang khusus untuk memfasilitasi dan mendukung pengembangan ide-ide kreatif serta inovatif di tingkat desa. Dengan fokus pada pemberdayaan masyarakat, kami berupaya menciptakan lingkungan yang kondusif bagi lahirnya solusi-solusi terobosan untuk meningkatkan kesejahteraan warga.
             </p>
             <div className="flex justify-center md:justify-start mt-5">

@@ -31,7 +31,7 @@ const Profil = ({ users }) => {
                 {/* Image Placeholder */}
                 <div className="flex items-center justify-center bg-gray-200">
                   <img
-                    src="https://github.com/user-attachments/assets/455f157d-e609-4b0e-9e11-d7ee36e8089d"
+                    src={user.avatar}
                     alt="User"
                     className="w-[50%] object-cover"
                   />

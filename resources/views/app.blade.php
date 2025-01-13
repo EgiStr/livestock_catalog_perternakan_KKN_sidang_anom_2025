@@ -1,24 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
     <head>
         <meta charset="utf-8">
+        <meta name="application-name" content="{{ config('app.name') }}">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="title" content="desa sindang anom">
-        <meta name="description" content="desa sindang anom menyediakan katalog peternakan yang sangat lengkap serta menyediakan informasi terkait kesehatan kandang serta terintegrasi Iot">
-        <meta name="keywords" content="desa,desasindanganom,sindanganom,sindang,anom,sekampungudik,sekampung,udik,lampung,lampungtimur,timur,kampung,kambing,sapi,peternakan,kampungkambing,IOT,iot,IoT">
+        <title>{{ config('app.name') }} - Katalog Peternakan Desa Sindang Anom</title>
+        <meta name="description" content="Sindanganomfarm.com adalah sebuah aplikasi katalog peternakan seperti kambing, sapi, ayam dll di Desa Sindang Anom, Kec. Sekampung Udik, Lampung Timur. Aplikasi ini bertujuan untuk mendigitalisasi peternakan di dalam desa dengan harapan meningkatkan penjualan peternakan dan centralisasi data.">
+        <meta name="keywords" content="peternakan, kambing, sapi, ayam, desa sindang anom, sekampung udik, lampung timur, digitalisasi peternakan, katalog peternakan">
+        <meta name="author" content="Rizki Dwi Prayoga">
         <meta name="robots" content="index, follow">
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta name="language" content="English">
-
-        <!-- Primary Meta Tags -->
-        <meta name="title" content="desa sindang anom" />
-        <meta name="description" content="desa sindang anom menyediakan katalog peternakan yang sangat lengkap serta menyediakan informasi terkait kesehatan kandang serta terintegrasi dengan Iot" />
-
+        <meta name="googlebot" content="index, follow">
+        <meta name="bingbot" content="index, follow">
+        <link rel="canonical" href="https://sindanganomfarm.com">
+        <meta property="og:title" content="Sindanganomfarm.com - Katalog Peternakan Desa Sindang Anom">
+        <meta property="og:description" content="Sindanganomfarm.com adalah sebuah aplikasi katalog peternakan seperti kambing, sapi, ayam dll di Desa Sindang Anom, Kec. Sekampung Udik, Lampung Timur. Aplikasi ini bertujuan untuk mendigitalisasi peternakan di dalam desa dengan harapan meningkatkan penjualan peternakan dan centralisasi data.">
+        <meta property="og:image" content="https://sindanganomfarm.com/og-image.jpg">
+        <meta property="og:url" content="https://sindanganomfarm.com">
+        <meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Sindanganomfarm.com - Katalog Peternakan Desa Sindang Anom">
+        <meta name="twitter:description" content="Sindanganomfarm.com adalah sebuah aplikasi katalog peternakan seperti kambing, sapi, ayam dll di Desa Sindang Anom, Kec. Sekampung Udik, Lampung Timur. Aplikasi ini bertujuan untuk mendigitalisasi peternakan di dalam desa dengan harapan meningkatkan penjualan peternakan dan centralisasi data.">
+        <meta name="twitter:image" content="https://sindanganomfarm.com/twitter-image.jpg">
+        <style>
+            [x-cloak] {
+                display: none !important;
+            }
+        </style>
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website" />
         <meta property="og:url" content="" />
-        <meta property="og:title" content="desa sindang anom" />
-        <meta property="og:description" content="desa sindang anom menyediakan katalog peternakan yang sangat lengkap serta menyediakan informasi terkait kesehatan kandang serta terintegrasi dengan Iot" />
+        <meta property="og:title" content="Sindanganomfarm.com - Katalog Peternakan Desa Sindang Anom">
+        <meta property="og:description" content="Sindanganomfarm.com adalah sebuah aplikasi katalog peternakan seperti kambing, sapi, ayam dll di Desa Sindang Anom, Kec. Sekampung Udik, Lampung Timur. Aplikasi ini bertujuan untuk mendigitalisasi peternakan di dalam desa dengan harapan meningkatkan penjualan peternakan dan centralisasi data.">
         <meta property="og:image" content="https://github.com/user-attachments/assets/deff3df0-9da5-4894-a61a-9a6c133a0e08" />
         <meta property="og:image:width" content="300">
         <meta property="og:image:height" content="300">
