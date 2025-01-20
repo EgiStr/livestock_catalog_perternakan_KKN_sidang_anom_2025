@@ -44,21 +44,23 @@ const DetailTernak = ({ farm }) => {
 
     // SEO Data with dynamic content
     const seoData = {
-        title: `${farm.name} - Detail Peternakan`,
-        description: `${farm.description?.slice(
-            0,
-            120
-        )}... Kandang dengan kapasitas ${
-            farm.capacity
-        } kepala. Monitoring suhu rata-rata: ${SensorAverage(
-            farm.iot_sensors,
-            "temperature"
-        )}°C, kelembapan: ${SensorAverage(farm.iot_sensors, "humidity")}%`,
-        image: getBaseUrl(farm.image_url),
+        title: farm?.name
+            ? `${farm.name} - Detail Peternakan`
+            : "Detail Peternakan",
+        description: farm?.description
+            ? `${farm.description.slice(0, 120)}... Kandang dengan kapasitas ${
+                  farm.capacity || "-"
+              } kepala. Monitoring suhu rata-rata: ${
+                  SensorAverage(farm.iot_sensors, "temperature") || "-"
+              }°C, kelembapan: ${
+                  SensorAverage(farm.iot_sensors, "humidity") || "-"
+              }%`
+            : "Detail peternakan tidak tersedia.",
+        image: farm?.image_url ? getBaseUrl(farm.image_url) : "",
         url: pageUrl,
         type: "article",
-        publishedAt: farm.created_at,
-        modifiedAt: farm.updated_at,
+        publishedAt: farm?.created_at || "",
+        modifiedAt: farm?.updated_at || "",
         siteName: "Sindanganomfarm.com",
     };
 
@@ -177,6 +179,14 @@ const DetailTernak = ({ farm }) => {
     const LineChart = ({ sensorData, sensorType }) => {
         const chartData = formatChartData(sensorData, sensorType);
 
+        if (!chartData) {
+            return (
+                <div className="flex justify-center items-center h-full">
+                    <p className="text-gray-500">Data tidak tersedia</p>
+                </div>
+            );
+        }
+
         const options = {
             responsive: true,
             maintainAspectRatio: false,
@@ -212,6 +222,15 @@ const DetailTernak = ({ farm }) => {
                 },
             },
         };
+
+        return (
+            <div className="bg-white p-4 rounded-lg shadow-lg">
+                <div className="h-[300px]">
+                    <Line data={chartData} options={options} />
+                </div>
+            </div>
+        );
+    };
 
         return (
             <div className="bg-white p-4 rounded-lg shadow-lg">
@@ -552,16 +571,5 @@ const SensorItem = ({ icon, label, value }) => (
     </div>
 );
 
-const LineChart = ({ title, data }) => (
-    <div className="bg-gray-50 p-4 rounded-lg shadow">
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-        <div className="h-64">
-            <Line
-                data={data}
-                options={{ responsive: true, maintainAspectRatio: false }}
-            />
-        </div>
-    </div>
-);
 
 export default DetailTernak;
