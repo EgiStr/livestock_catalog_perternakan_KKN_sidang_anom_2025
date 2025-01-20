@@ -38,55 +38,6 @@ const DetailTernak = ({ farm }) => {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
 
-    // const farm = {
-    //   name: "Kandang Ternak Sejahtera",
-    //   description: "Kandang modern untuk peternakan unggas.",
-    //   pan_length: 10,
-    //   pan_width: 5,
-    //   pan_height: 3,
-    //   capacity: 200,
-    //   location: "Desa Maju, Kecamatan Harmoni",
-    //   user: {
-    //     fullname: "Pak Tani",
-    //     phone_number: "081234567890",
-    //   },
-    //   image: "https://placehold.co/600x400",
-    //   iot_sensors: {
-    //     temperature: "30°C",
-    //     humidity: "70%",
-    //     ammonia: "5 ppm",
-    //     light_intensity: "1000 lux",
-    //     temperature_data: Array.from({ length: 60 }, (_, i) => {
-    //       const date = new Date(2025, 0, 1 + i); // Mulai dari 1 Januari 2025
-    //       return {
-    //         datetime: date.toISOString().split("T")[0], // Format tanggal: YYYY-MM-DD
-    //         value: Math.random() * 5 + 28, // Suhu antara 28°C - 33°C
-    //       };
-    //     }),
-    //     humidity_data: Array.from({ length: 60 }, (_, i) => {
-    //       const date = new Date(2025, 0, 1 + i);
-    //       return {
-    //         datetime: date.toISOString().split("T")[0],
-    //         value: Math.random() * 10 + 65, // Kelembapan antara 65% - 75%
-    //       };
-    //     }),
-    //     ammonia_data: Array.from({ length: 60 }, (_, i) => {
-    //       const date = new Date(2025, 0, 1 + i);
-    //       return {
-    //         datetime: date.toISOString().split("T")[0],
-    //         value: Math.random() * 2 + 4, // Amonia antara 4 ppm - 6 ppm
-    //       };
-    //     }),
-    //     light_intensity_data: Array.from({ length: 60 }, (_, i) => {
-    //       const date = new Date(2025, 0, 1 + i);
-    //       return {
-    //         datetime: date.toISOString().split("T")[0],
-    //         value: Math.random() * 300 + 900, // Intensitas cahaya antara 900 lux - 1200 lux
-    //       };
-    //     }),
-    //   },
-    // };
-
     const filterDataByDate = (data) => {
         if (!startDate || !endDate) return data;
         const start = new Date(startDate);
@@ -97,21 +48,105 @@ const DetailTernak = ({ farm }) => {
         });
     };
 
-    const generateChartData = (label, data = []) => {
-        const filteredData = filterDataByDate(data);
+    const formatChartData = (sensorData, sensorType) => {
+        if (!sensorData || sensorData.length === 0) return null;
+
+        const filteredData = filterDataByDate(sensorData);
+
         return {
-            labels: filteredData.map((d) => d.datetime || "Unknown"),
+            labels: filteredData.map((data) =>
+                new Date(data.createdAt).toLocaleString()
+            ),
             datasets: [
                 {
-                    label: label,
-                    data: filteredData.map((d) => d.value || 0),
+                    label: sensorType,
+                    data: filteredData.map((data) =>
+                        parseFloat(data[sensorType.toLowerCase()])
+                    ),
                     fill: false,
-                    borderColor: "rgba(75, 192, 192, 1)",
-                    backgroundColor: "rgba(75, 192, 192, 0.2)",
-                    tension: 0.1,
+                    borderColor: getChartColor(sensorType),
+                    backgroundColor: getChartColor(sensorType, 0.2),
+                    tension: 0.4,
+                    pointRadius: 4,
                 },
             ],
         };
+    };
+
+    // Helper function for chart colors
+    const getChartColor = (sensorType, alpha = 1) => {
+        const colors = {
+            Temperature: `rgba(255, 99, 132, ${alpha})`,
+            Humidity: `rgba(54, 162, 235, ${alpha})`,
+            Ammonia: `rgba(75, 192, 192, ${alpha})`,
+            Light_intensity: `rgba(255, 206, 86, ${alpha})`,
+        };
+        return colors[sensorType] || `rgba(75, 192, 192, ${alpha})`;
+    };
+
+    // Update the LineChart component
+    const LineChart = ({ sensorData, sensorType }) => {
+        const chartData = formatChartData(sensorData, sensorType);
+
+        const options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: "top",
+                },
+                title: {
+                    display: true,
+                    text: `${sensorType} Over Time`,
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function (value) {
+                            const units = {
+                                Temperature: "°C",
+                                Humidity: "%",
+                                Ammonia: "ppm",
+                                Light_intensity: "lux",
+                            };
+                            return `${value}${units[sensorType] || ""}`;
+                        },
+                    },
+                },
+                x: {
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45,
+                    },
+                },
+            },
+        };
+
+        return (
+            <div className="bg-white p-4 rounded-lg shadow-lg">
+                <div className="h-[300px]">
+                    <Line data={chartData} options={options} />
+                </div>
+            </div>
+        );
+    };
+
+    const SensorAverage = (data, name_column) => {
+        // Handle empty/null cases
+        if (!data || data.length === 0) return "-";
+
+        // filtered data
+
+        // Calculate sum, converting string values to numbers
+        const sum = data.reduce((acc, cur) => {
+            const value = parseFloat(cur[name_column]);
+            return acc + (isNaN(value) ? 0 : value);
+        }, 0);
+
+        // Calculate and format average to 2 decimal places
+        return (sum / data.length).toFixed(2);
     };
 
     if (!farm) {
@@ -123,7 +158,6 @@ const DetailTernak = ({ farm }) => {
             </Layout>
         );
     }
-
     return (
         <Layout>
             <div className="bg-gray-100 min-h-screen p-6 md:p-12 mt-20">
@@ -132,12 +166,10 @@ const DetailTernak = ({ farm }) => {
                     <div className="bg-white rounded-lg mb-8">
                         <div className="p-6">
                             <div className="flex flex-col-reverse md:flex-row gap-8">
-                                {/* Gambar dipindahkan ke atas pada mobile */}
                                 <div className="md:w-1/2 order-1 md:order-none">
                                     <img
-                                        // src="https://github.com/user-attachments/assets/24fb7c2d-fad0-42a2-b588-09f90ad43b7e"
                                         src={
-                                            `${getBaseUrl(farm.image_ur)}` ||
+                                            `${getBaseUrl(farm.image_url)}` ||
                                             "https://github.com/user-attachments/assets/24fb7c2d-fad0-42a2-b588-09f90ad43b7e"
                                         }
                                         alt="farm"
@@ -188,13 +220,17 @@ const DetailTernak = ({ farm }) => {
                                                 "Tidak ada data user"}
                                         </span>
                                     </div>
-                                    <Link href="/wa">
+                                    <a
+                                        href={`https://wa.me/${farm.user?.phone_number}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         <button className="w-full text-white bg-green hover:bg-HoverGreen mt-2 px-6 py-3 rounded-md font-semibold transition duration-300">
                                             Hubungi:{" "}
                                             {farm.user?.phone_number ||
                                                 "Tidak ada data phone number"}
                                         </button>
-                                    </Link>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -214,7 +250,12 @@ const DetailTernak = ({ farm }) => {
                                     />
                                 }
                                 label="Suhu :"
-                                value={farm.iot_sensors?.temperature || "-"}
+                                value={
+                                    SensorAverage(
+                                        farm.iot_sensors,
+                                        "temperature"
+                                    ) || "-"
+                                }
                             />
                             <SensorItem
                                 icon={
@@ -224,7 +265,12 @@ const DetailTernak = ({ farm }) => {
                                     />
                                 }
                                 label="Kelembapan :"
-                                value={farm.iot_sensors?.humidity || "-"}
+                                value={
+                                    SensorAverage(
+                                        farm.iot_sensors,
+                                        "humidity"
+                                    ) || "-"
+                                }
                             />
                             <SensorItem
                                 icon={
@@ -234,7 +280,13 @@ const DetailTernak = ({ farm }) => {
                                     />
                                 }
                                 label="Amonia :"
-                                value={farm.iot_sensors?.ammonia || "-"}
+                                // value={farm.iot_sensors?.ammonia || "-"}
+                                value={
+                                    SensorAverage(
+                                        farm.iot_sensors,
+                                        "ammonia"
+                                    ) || "-"
+                                }
                             />
                             <SensorItem
                                 icon={
@@ -244,7 +296,13 @@ const DetailTernak = ({ farm }) => {
                                     />
                                 }
                                 label="Intensitas Cahaya :"
-                                value={farm.iot_sensors?.light_intensity || "-"}
+                                // value={farm.iot_sensors?.light_intensity || "-"}
+                                value={
+                                    SensorAverage(
+                                        farm.iot_sensors,
+                                        "light_intensity"
+                                    ) || "-"
+                                }
                             />
                         </div>
                     </div>
@@ -290,42 +348,90 @@ const DetailTernak = ({ farm }) => {
                             </div>
                         </div>
                     </div>
-
-                    {/* Sensor Charts */}
+                    {/* Sensor Charts Section */}
                     <div className="bg-white rounded-lg shadow-md p-6">
-                        <h2 className="text-xl font-bold text-green mb-4">
-                            Grafik Sensor
-                        </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <LineChart
-                                title="Suhu"
-                                data={generateChartData(
-                                    "Suhu",
-                                    farm.iot_sensors?.temperature_data || []
-                                )}
-                            />
-                            <LineChart
-                                title="Kelembapan"
-                                data={generateChartData(
-                                    "Kelembapan",
-                                    farm.iot_sensors?.humidity_data || []
-                                )}
-                            />
-                            <LineChart
-                                title="Amonia"
-                                data={generateChartData(
-                                    "Amonia",
-                                    farm.iot_sensors?.ammonia_data || []
-                                )}
-                            />
-                            <LineChart
-                                title="Intensitas Cahaya"
-                                data={generateChartData(
-                                    "Intensitas Cahaya",
-                                    farm.iot_sensors?.light_intensity_data || []
-                                )}
-                            />
+                        <div className="mb-6">
+                            <h2 className="text-xl font-bold text-green mb-2">
+                                Grafik Sensor
+                            </h2>
+                            <p className="text-gray-600 text-sm">
+                                Monitoring data sensor dalam rentang waktu
+                            </p>
                         </div>
+
+                        {/* Charts Grid Layout */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {/* Temperature Chart */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="mb-4">
+                                    <h3 className="font-semibold text-gray-700 flex items-center">
+                                        <Thermometer className="w-5 h-5 mr-2 text-red-500" />
+                                        Suhu
+                                    </h3>
+                                </div>
+                                <div className="h-[300px]">
+                                    <LineChart
+                                        sensorData={farm.iot_sensors}
+                                        sensorType="Temperature"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Humidity Chart */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="mb-4">
+                                    <h3 className="font-semibold text-gray-700 flex items-center">
+                                        <Droplets className="w-5 h-5 mr-2 text-blue-500" />
+                                        Kelembapan
+                                    </h3>
+                                </div>
+                                <div className="h-[300px]">
+                                    <LineChart
+                                        sensorData={farm.iot_sensors}
+                                        sensorType="Humidity"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Ammonia Chart */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="mb-4">
+                                    <h3 className="font-semibold text-gray-700 flex items-center">
+                                        <Wind className="w-5 h-5 mr-2 text-green-500" />
+                                        Amonia
+                                    </h3>
+                                </div>
+                                <div className="h-[300px]">
+                                    <LineChart
+                                        sensorData={farm.iot_sensors}
+                                        sensorType="Ammonia"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Light Intensity Chart */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="mb-4">
+                                    <h3 className="font-semibold text-gray-700 flex items-center">
+                                        <Sun className="w-5 h-5 mr-2 text-yellow-500" />
+                                        Intensitas Cahaya
+                                    </h3>
+                                </div>
+                                <div className="h-[300px]">
+                                    <LineChart
+                                        sensorData={farm.iot_sensors}
+                                        sensorType="Light_intensity"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Optional: Loading State */}
+                        {!farm.iot_sensors && (
+                            <div className="flex justify-center items-center h-64">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green"></div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

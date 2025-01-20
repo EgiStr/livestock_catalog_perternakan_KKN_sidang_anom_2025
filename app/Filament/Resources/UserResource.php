@@ -116,7 +116,15 @@ class UserResource extends Resource
                                 Forms\Components\TextInput::make('phone_number')
                                     ->required()
                                     ->maxLength(255)
-                                    ->label('Nomor Telepon'),
+                                    ->label('Nomor Telepon')
+                                    ->dehydrateStateUsing(function (string $state): string {
+                                        // Ensure the phone number starts with +62
+                                        if (Str::startsWith($state, '08')) {
+                                            $state = '628' . substr($state, 2);
+                                        }
+                                        return $state;
+                                    })
+                                    ->rules(['regex:/^(628|08)[0-9]{9,13}$/']),
 
                                 Forms\Components\TextInput::make('bio')
                                     ->label('Biografi'),
@@ -225,6 +233,4 @@ class UserResource extends Resource
     {
         return 'Akses';
     }
-
-
 }
