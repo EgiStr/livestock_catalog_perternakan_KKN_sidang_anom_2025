@@ -10,7 +10,7 @@ class IotSensors extends Model
 {
     use HasFactory;
     use HasUuids;
-    public $timestamps = true;
+    public $timestamps = false;
     
     protected $fillable = [
         'farm_id',

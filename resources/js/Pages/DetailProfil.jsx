@@ -78,13 +78,6 @@ const DetailProfil = ({ user }) => {
                   <div className="p-4 flex flex-col flex-grow">
                     <div className="flex items-center justify-between mb-2">
                       <h2 className="text-lg font-semibold text-gray-800">{item.name}</h2>
-                      <div className="text-yellow-500 flex space-x-1">
-                        {Array(5)
-                          .fill(0)
-                          .map((_, i) => (
-                            <span key={i}>⭐</span>
-                          ))}
-                      </div>
                     </div>
 
                     {/* Description */}

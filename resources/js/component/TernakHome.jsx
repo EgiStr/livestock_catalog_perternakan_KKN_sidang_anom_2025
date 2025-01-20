@@ -43,13 +43,6 @@ const TernakHome = ({ farms }) => {
                                     </span>
                                     {item.name}
                                 </div>
-                                <div className="text-yellow-500 flex space-x-1">
-                                    {Array(5)
-                                        .fill(0)
-                                        .map((_, i) => (
-                                            <span key={i}>⭐</span>
-                                        ))}
-                                </div>
                             </div>
 
                             {/* Title */}
