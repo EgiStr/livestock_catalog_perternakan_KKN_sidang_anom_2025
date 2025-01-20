@@ -20,6 +20,11 @@ class UserController extends Controller
                 $query->where('name', 'farmer');
             })
             ->get();
+        $users->each(function ($user) {
+            $user->avatar = $user->getFilamentAvatarUrl();
+        });
+
+
         return Inertia::render('Profil', [
             'users' => $users,
         ]);
@@ -33,6 +38,7 @@ class UserController extends Controller
         $UserWithRelations = User::with(['farms'])
             ->where('id', $user->id)
             ->first();
+        $UserWithRelations->avatar = $UserWithRelations->getFilamentAvatarUrl();
 
         return Inertia::render('DetailProfil', [
             'user' => $UserWithRelations,

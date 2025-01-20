@@ -33,16 +33,14 @@ class FarmController extends Controller
 
 
     public function show(Farm $farm): Response
-{
-    // Load related users and iot_sensors
-    $farmWithRelations = Farm::with(['user', 'iot_sensors'])
-        ->where('id', $farm->id)
-        ->first();
+    {
+        // Load related users and iot_sensors
+        $farmWithRelations = Farm::with(['user', 'iot_sensors'])
+            ->where('id', $farm->id)
+            ->first();
 
-    return Inertia::render('DetailTernak', [
-        'farm' => $farmWithRelations,
-    ]);
-}
-
-   
+        return Inertia::render('DetailTernak', [
+            'farm' => $farmWithRelations,
+        ]);
+    }
 }

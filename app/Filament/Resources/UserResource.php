@@ -226,32 +226,5 @@ class UserResource extends Resource
         return 'Akses';
     }
 
-    public static function doResendEmailVerification($settings = null, $user): void
-    {
-        if (!method_exists($user, 'notify')) {
-            $userClass = $user::class;
 
-            throw new Exception("Model [{$userClass}] tidak memiliki metode [notify()].");
-        }
-
-        if ($settings->isMailSettingsConfigured()) {
-            $notification = new VerifyEmail();
-            $notification->url = Filament::getVerifyEmailUrl($user);
-
-            $settings->loadMailSettingsToConfig();
-
-            $user->notify($notification);
-
-            Notification::make()
-                ->title('Verifikasi Email Terkirim')
-                ->success()
-                ->send();
-        } else {
-            Notification::make()
-                ->title('Pengaturan Email Tidak Dikonfigurasi')
-                ->body('Silakan konfigurasikan pengaturan email terlebih dahulu.')
-                ->warning()
-                ->send();
-        }
-    }
 }
