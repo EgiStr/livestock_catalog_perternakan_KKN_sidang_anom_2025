@@ -5,10 +5,99 @@ import HeroCustom from "../component/HeroCustom";
 import Layout from "../Layouts/Layout";
 import { User } from "lucide-react";
 import { getBaseUrl } from "../helpers/baseUrl";
+import SEOHead from "../component/SeoHead";
 
 const Ternak = ({ farms }) => {
+    const pageUrl = window.location.href;
+
+    // SEO Data
+    const seoData = {
+        title: "Daftar Peternakan Desa Sindang Anom",
+        description: `Katalog lengkap ${farms.length} peternakan di Desa Sindang Anom, Lampung Timur. Tersedia informasi kandang, kapasitas, dan monitoring suhu kandang terintegrasi IoT.`,
+        image: "https://sindanganomfarm.com/og-image.jpg",
+        url: pageUrl,
+        type: "website",
+    };
+
+    // CollectionPage Schema
+    const collectionSchema = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": pageUrl,
+        name: "Daftar Peternakan Desa Sindang Anom",
+        description: "Katalog peternakan di Desa Sindang Anom",
+        url: pageUrl,
+        numberOfItems: farms.length,
+        hasPart: farms.map((farm) => ({
+            "@type": "LocalBusiness",
+            name: farm.name,
+            description: farm.description,
+            image: getBaseUrl(farm.image_url),
+            address: {
+                "@type": "PostalAddress",
+                addressLocality: "Sindang Anom",
+                addressRegion: "Lampung Timur",
+                addressCountry: "ID",
+            },
+            owns: {
+                "@type": "Place",
+                name: `Kandang ${farm.name}`,
+                containsPlace: {
+                    "@type": "Place",
+                    description: `Kandang dengan kapasitas ${farm.capacity} kepala`,
+                },
+            },
+        })),
+    };
+
+    // BreadcrumbList Schema
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            {
+                "@type": "ListItem",
+                position: 1,
+                name: "Beranda",
+                item: window.location.origin,
+            },
+            {
+                "@type": "ListItem",
+                position: 2,
+                name: "Peternakan",
+                item: pageUrl,
+            },
+        ],
+    };
+
+    // ItemList Schema
+    const itemListSchema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        itemListElement: farms.map((farm, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item: {
+                "@type": "LocalBusiness",
+                name: farm.name,
+                description: farm.description,
+                image: getBaseUrl(farm.image_url),
+                url: `${window.location.origin}/detailternak/${farm.id}`,
+            },
+        })),
+    };
     return (
         <>
+            <SEOHead {...seoData} />
+            <script type="application/ld+json">
+                {JSON.stringify(collectionSchema)}
+            </script>
+            <script type="application/ld+json">
+                {JSON.stringify(breadcrumbSchema)}
+            </script>
+            <script type="application/ld+json">
+                {JSON.stringify(itemListSchema)}
+            </script>
             <Navbar />
             <HeroCustom name="Peternakan di Desa Sindang Anom" />
             <Layout>

@@ -7,6 +7,8 @@ import TentangHome from "../component/TentangHome";
 import { User } from "lucide-react";
 import Kades from "../../../public/images/kades.jpeg";
 import { getBaseUrl } from "../helpers/baseUrl";
+import SeoHead from "../component/SeoHead";
+import SEOHead from "../component/SeoHead";
 
 const staffMembers = [
     {
@@ -107,59 +109,115 @@ const staffMembers = [
 ];
 
 const Home = ({ farms }) => {
+    const pageUrl = window.location.href;
+    const seoData = {
+        title: "Beranda Desa Sindang Anom",
+        description:
+            "Portal resmi Desa Sindang Anom menyediakan informasi peternakan, struktur organisasi desa, dan monitoring kandang terintegrasi IoT.",
+        image: "https://sindanganomfarm.com/og-image.jpg",
+        url: pageUrl,
+    };
+
+    // Organization Schema
+    const organizationSchema = {
+        "@context": "https://schema.org",
+        "@type": "GovernmentOrganization",
+        name: "Desa Sindang Anom",
+        url: pageUrl,
+        logo: "https://sindanganomfarm.com/LOGO.png",
+        description: "Pemerintahan Desa Sindang Anom, Lampung Timur",
+        address: {
+            "@type": "PostalAddress",
+            addressLocality: "Sindang Anom",
+            addressRegion: "Lampung Timur",
+            addressCountry: "ID",
+        },
+        employee: staffMembers.map((staff) => ({
+            "@type": "Person",
+            name: staff.name,
+            jobTitle: staff.title,
+            image: staff.image,
+        })),
+    };
+
+    // BreadcrumbList Schema
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            {
+                "@type": "ListItem",
+                position: 1,
+                name: "Beranda",
+                item: pageUrl,
+            },
+        ],
+    };
+
     const latestFarms = farms
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0, 4);
 
     return (
         <>
+            <SEOHead {...seoData} />
+            <script type="application/ld+json">
+                {JSON.stringify(organizationSchema)}
+            </script>
+            <script type="application/ld+json">
+                {JSON.stringify(breadcrumbSchema)}
+            </script>
             <Hero />
             <Layout>
                 <TentangHome />
                 {/* <StokPage /> */}
                 <div className="min-h-screen overflow-x-hidden bg-green flex flex-col items-center pt-16 px-4 pb-20">
-      <div className="text-center text-white mb-10 md:mb-20">
-        <h1 className="text-2xl md:text-3xl font-bold mt-3">STOK</h1>
-        <p className="text-base md:text-lg font-semibold mt-2">
-          Struktur Organisasi dan Tata Kerja Desa Sindang Anom
-        </p>
-      </div>
+                    <div className="text-center text-white mb-10 md:mb-20">
+                        <h1 className="text-2xl md:text-3xl font-bold mt-3">
+                            STOK
+                        </h1>
+                        <p className="text-base md:text-lg font-semibold mt-2">
+                            Struktur Organisasi dan Tata Kerja Desa Sindang Anom
+                        </p>
+                    </div>
 
-      <div className="flex flex-wrap gap-6 items-center justify-center mb-10">
-        <div className="bg-white rounded-lg shadow-md p-5 text-center w-full max-w-[250px] h-auto flex flex-col items-center">
-          <img
-            src={Kades}
-            alt="Kepala Desa"
-            className="w-32 h-32 md:w-[150px] md:h-[150px] mx-auto rounded-md object-cover"
-          />
-          <h2 className="font-bold text-lg mt-4">Kepala Desa</h2>
-          <p className="font-bold mt-2 text-base md:text-lg text-HoverGreen">
-            Kepala Desa
-          </p>
-        </div>
-      </div>
+                    <div className="flex flex-wrap gap-6 items-center justify-center mb-10">
+                        <div className="bg-white rounded-lg shadow-md p-5 text-center w-full max-w-[250px] h-auto flex flex-col items-center">
+                            <img
+                                src={Kades}
+                                alt="Kepala Desa"
+                                className="w-32 h-32 md:w-[150px] md:h-[150px] mx-auto rounded-md object-cover"
+                            />
+                            <h2 className="font-bold text-lg mt-4">
+                                Kepala Desa
+                            </h2>
+                            <p className="font-bold mt-2 text-base md:text-lg text-HoverGreen">
+                                Kepala Desa
+                            </p>
+                        </div>
+                    </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {staffMembers.map((staff, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-lg shadow-md p-5 text-center w-full max-w-[250px] h-auto flex flex-col items-center"
-          >
-            <img
-              src={staff.image}
-              alt={staff.name}
-              className="w-32 h-32 md:w-[150px] md:h-[150px] mx-auto rounded-md object-cover"
-            />
-            <h2 className="font-bold text-base md:text-lg mt-4">
-              {staff.name}
-            </h2>
-            <p className="font-bold mt-2 text-sm md:text-base text-HoverGreen">
-              {staff.title}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                        {staffMembers.map((staff, index) => (
+                            <div
+                                key={index}
+                                className="bg-white rounded-lg shadow-md p-5 text-center w-full max-w-[250px] h-auto flex flex-col items-center"
+                            >
+                                <img
+                                    src={staff.image}
+                                    alt={staff.name}
+                                    className="w-32 h-32 md:w-[150px] md:h-[150px] mx-auto rounded-md object-cover"
+                                />
+                                <h2 className="font-bold text-base md:text-lg mt-4">
+                                    {staff.name}
+                                </h2>
+                                <p className="font-bold mt-2 text-sm md:text-base text-HoverGreen">
+                                    {staff.title}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
                 {/* Peternakan */}
                 <div className="bg-gray-100 min-h-screen py-10 mt-10">

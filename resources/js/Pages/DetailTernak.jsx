@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../Layouts/Layout";
 import { Link } from "@inertiajs/inertia-react";
+import SeoHead from "../component/SeoHead";
 import {
     User,
     Thermometer,
@@ -22,6 +23,7 @@ import {
     Legend,
 } from "chart.js";
 import { getBaseUrl } from "../helpers/baseUrl";
+import SEOHead from "../component/SeoHead";
 
 // Register Chart.js components
 ChartJS.register(
@@ -37,6 +39,93 @@ ChartJS.register(
 const DetailTernak = ({ farm }) => {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+
+    const pageUrl = window.location.href;
+
+    // SEO Data with dynamic content
+    const seoData = {
+        title: `${farm.name} - Detail Peternakan`,
+        description: `${farm.description?.slice(
+            0,
+            120
+        )}... Kandang dengan kapasitas ${
+            farm.capacity
+        } kepala. Monitoring suhu rata-rata: ${SensorAverage(
+            farm.iot_sensors,
+            "temperature"
+        )}°C, kelembapan: ${SensorAverage(farm.iot_sensors, "humidity")}%`,
+        image: getBaseUrl(farm.image_url),
+        url: pageUrl,
+        type: "article",
+        publishedAt: farm.created_at,
+        modifiedAt: farm.updated_at,
+        siteName: "Sindanganomfarm.com",
+    };
+
+    // Farm Schema
+    const farmSchema = {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": pageUrl,
+        name: farm.name,
+        image: getBaseUrl(farm.image_url),
+        description: farm.description,
+        address: {
+            "@type": "PostalAddress",
+            streetAddress: farm.location,
+            addressLocality: "Sindang Anom",
+            addressRegion: "Lampung Timur",
+            addressCountry: "ID",
+        },
+        geo: {
+            "@type": "GeoCoordinates",
+            latitude: farm.latitude,
+            longitude: farm.longitude,
+        },
+        telephone: farm.user?.phone_number,
+        owner: {
+            "@type": "Person",
+            name: farm.user?.fullname,
+        },
+        additionalProperty: [
+            {
+                "@type": "PropertyValue",
+                name: "Kapasitas",
+                value: `${farm.capacity} Kepala`,
+            },
+            {
+                "@type": "PropertyValue",
+                name: "Dimensi Kandang",
+                value: `${farm.pan_length}x${farm.pan_width}x${farm.pan_height} meter`,
+            },
+        ],
+    };
+
+    // BreadcrumbList Schema
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            {
+                "@type": "ListItem",
+                position: 1,
+                name: "Beranda",
+                item: window.location.origin,
+            },
+            {
+                "@type": "ListItem",
+                position: 2,
+                name: "Peternakan",
+                item: `${window.location.origin}/peternakan`,
+            },
+            {
+                "@type": "ListItem",
+                position: 3,
+                name: farm.name,
+                item: pageUrl,
+            },
+        ],
+    };
 
     const filterDataByDate = (data) => {
         if (!startDate || !endDate) return data;
@@ -160,6 +249,13 @@ const DetailTernak = ({ farm }) => {
     }
     return (
         <Layout>
+            <SEOHead {...seoData} />
+            <script type="application/ld+json">
+                {JSON.stringify(farmSchema)}
+            </script>
+            <script type="application/ld+json">
+                {JSON.stringify(breadcrumbSchema)}
+            </script>
             <div className="bg-gray-100 min-h-screen p-6 md:p-12 mt-20">
                 <div className="max-w-6xl mx-auto reverse">
                     {/* Farm Information */}

@@ -3,10 +3,84 @@ import Layout from "../Layouts/Layout";
 import { Link } from "@inertiajs/inertia-react";
 import { User, Star, MapPin, Phone } from "lucide-react";
 import { getBaseUrl } from "../helpers/baseUrl";
+import SEOHead from "../component/SeoHead";
 
 const DetailProfil = ({ user }) => {
+    const pageUrl = window.location.href;
+
+    // SEO Data
+    const seoData = {
+        title: `Profil ${user.fullname}`,
+        description: `Profil peternak ${
+            user.fullname
+        } di Desa Sindang Anom. Memiliki ${
+            user.farms.length
+        } peternakan aktif. ${user.bio?.slice(0, 120)}`,
+        image: user.avatar,
+        url: pageUrl,
+        type: "profile",
+        siteName: "Sindanganomfarm.com",
+    };
+
+    // Person Schema
+    const personSchema = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "@id": pageUrl,
+        name: user.fullname,
+        description: user.bio,
+        image: user.avatar,
+        telephone: user.phone_number,
+        url: pageUrl,
+        owns: user.farms.map((farm) => ({
+            "@type": "LocalBusiness",
+            name: farm.name,
+            description: farm.description,
+            image: getBaseUrl(farm.image_url),
+            address: {
+                "@type": "PostalAddress",
+                streetAddress: farm.location,
+                addressLocality: "Sindang Anom",
+                addressRegion: "Lampung Timur",
+                addressCountry: "ID",
+            },
+        })),
+    };
+
+    // BreadcrumbList Schema
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            {
+                "@type": "ListItem",
+                position: 1,
+                name: "Beranda",
+                item: window.location.origin,
+            },
+            {
+                "@type": "ListItem",
+                position: 2,
+                name: "Profil",
+                item: `${window.location.origin}/profil`,
+            },
+            {
+                "@type": "ListItem",
+                position: 3,
+                name: user.fullname,
+                item: pageUrl,
+            },
+        ],
+    };
     return (
         <Layout>
+            <SEOHead {...seoData} />
+            <script type="application/ld+json">
+                {JSON.stringify(personSchema)}
+            </script>
+            <script type="application/ld+json">
+                {JSON.stringify(breadcrumbSchema)}
+            </script>
             <div className="min-h-screen p-3 md:p-12 mt-10 px-2 md:px-[180px]">
                 {/* Profil Section */}
                 <section className="max-w-3xl mx-auto p-4">
